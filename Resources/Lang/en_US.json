@@ -2784,6 +2784,8 @@
   "GNoHigh": "Oh, absolutely! You're getting warmer. In fact, it's so high that I need a telescope to see it from here! \nYou have <color=#ff0000>{0} guesses</color> left!",
   "GNoWon": "Oh, how did you ever figure that out? It's almost like you're a mind reader! Congratulations, you're a genius! You found the secret number with <color=#00ff00>{0} guesses</color> left!",
 
+  "WordleCommandInfo": "<b>This Command can only be used when in the lobby or after you die.</b>\n\nType <b>/wordle XXXXX</b> to play Wordle. XXXXX can be any five letter word. \n\nYou get maximum of <color=#ff0000>6 tries</color> to guess the word.\n\n Example:- <b>/wordle adieu</b>",
+
   "RandCommandInfo": "<b>This Command can only be used when in the lobby or after you die.</b>\n\ntype <b>/rand X Y</b> to get a number between X and Y, inclusive. \nX and Y can be any number between 0 and 2147483647, including both numbers.\nX must be less than Y.\n\nExample:- <b>/rand 0 99</b>",
   "RandResult": "Congratulations, your random number is {0}! Wasn't that fun?",
 
