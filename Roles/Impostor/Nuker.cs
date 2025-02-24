@@ -47,15 +47,7 @@ internal class Nuker : RoleBase
         while (shapeshifter.Is(CustomRoles.Nuker))
         {
             foreach (var target in Main.AllPlayerControls)
-            {
-                if (!target.IsModded()) target.KillFlash();
-
-                if (!target.IsAlive() || Medic.IsProtected(target.PlayerId) || target.inVent || target.IsTransformedNeutralApocalypse() || target.Is(CustomRoles.Solsticer)) continue;
-
-                var pos = shapeshifter.transform.position;
-                var dis = Utils.GetDistance(pos, target.transform.position);
-                if (dis > BomberRadius.GetFloat()) continue;
-
+            {              
                 target.SetDeathReason(PlayerState.DeathReason.Bombed);
                 target.RpcMurderPlayer(target);
                 target.SetRealKiller(shapeshifter);
