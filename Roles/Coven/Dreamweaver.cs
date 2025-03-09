@@ -145,6 +145,7 @@ internal class Dreamweaver : CovenManager
         target.Notify(GetString("Dreamweaver.InsomniaNotification"));
         target.SetAbilityUseLimit(0);
         target.SetKillCooldownV3(999);
+        target.ResetKillCooldown();
     }
     private static bool IsDreamwoven(byte target)
     {
@@ -209,7 +210,10 @@ internal class Dreamweaver : CovenManager
                 continue; 
             }
             if (targetPc.GetAbilityUseLimit() > 0) targetPc.SetAbilityUseLimit(0);
-            if (targetPc.GetKillTimer() < 1) targetPc.SetKillCooldownV3(999);
+            if (targetPc.GetKillTimer() < 1) { 
+                targetPc.SetKillCooldownV3(999); 
+                targetPc.ResetKillCooldown(); 
+            }
         }
     }
     private void ResetInsomnia(byte dreamweaver)
