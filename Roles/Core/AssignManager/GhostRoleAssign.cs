@@ -1,5 +1,6 @@
 using Hazel;
 using System.Text;
+using TOHE.Roles.Coven;
 
 namespace TOHE.Roles.Core.AssignManager;
 
@@ -12,11 +13,14 @@ public static class GhostRoleAssign
     private static bool GetChance(this CustomRoles role) => role.GetMode() == 100 || Rnd.Next(1, 100) <= role.GetMode();
     private static int ImpCount = 0;
     private static int CrewCount = 0;
+    private static int CovenCount = 0;
 
     public static Dictionary<byte, CustomRoles> forceRole = [];
 
     private static readonly List<CustomRoles> HauntedList = [];
     private static readonly List<CustomRoles> ImpHauntedList = [];
+    private static readonly List<CustomRoles> CovenHauntedList = [];
+
     public static void GhostAssignPatch(PlayerControl player)
     {
         if (GameStates.IsHideNSeek
@@ -42,12 +46,10 @@ public static class GhostRoleAssign
         // Neutral Apocalypse can't get ghost roles
         if (getplrRole.IsNA() || getplrRole.IsTNA() && !Main.PlayerStates[player.PlayerId].IsNecromancer) return;
 
-        // Coven Ghost Roles don't exist yet
-        if (getplrRole.IsCoven() && !Main.PlayerStates[player.PlayerId].IsNecromancer) return;
-        if (Main.PlayerStates[player.PlayerId].IsNecromancer)
+        // Necromancer has to go back to being Necromancer before they can get a ghost role
+        if (Main.PlayerStates[player.PlayerId].IsNecromancer && CovenCount < Options.MaxCovenGhost.GetInt() && !player.Is(CustomRoles.Necromancer))
         {
-            GhostGetPreviousRole[player.PlayerId] = CustomRoles.Necromancer;
-            return;
+            Necromancer.RevertRole(player, player.GetCustomRole());
         }
 
         // Roles can win after death, should not get ghost roles
@@ -74,15 +76,18 @@ public static class GhostRoleAssign
         var CheckNeutral = player.GetCustomRole().IsNeutral() && Options.NeutralCanBecomeGhost.GetBool();
         var IsCrewmate = ((getplrRole.IsCrewmate() || player.Is(CustomRoles.Admired)) && IsNeutralAllowed) || CheckNeutral;
         var IsImpostor = (getplrRole.IsImpostor() && (IsNeutralAllowed || player.Is(CustomRoles.Madmate))) || CheckNeutral;
+        var IsCoven = ((getplrRole.IsCoven() || player.Is(CustomRoles.Enchanted)) && IsNeutralAllowed) || CheckNeutral;
+
 
         if (getplrRole.IsGhostRole() || player.IsAnySubRole(x => x.IsGhostRole() || x == CustomRoles.Gravestone) || !Options.CustomGhostRoleCounts.Any()) return;
 
-        if (IsImpostor && ImpCount >= Options.MaxImpGhost.GetInt() || IsCrewmate && CrewCount >= Options.MaxCrewGhost.GetInt()) return;
+        if (IsImpostor && ImpCount >= Options.MaxImpGhost.GetInt() || IsCrewmate && CrewCount >= Options.MaxCrewGhost.GetInt() || IsCoven && CovenCount >= Options.MaxCovenGhost.GetInt()) return;
 
         GhostGetPreviousRole[player.PlayerId] = getplrRole;
 
         HauntedList.Clear();
         ImpHauntedList.Clear();
+        CovenHauntedList.Clear();
 
         CustomRoles ChosenRole = CustomRoles.NotAssigned;
 
@@ -107,6 +112,16 @@ public static class GhostRoleAssign
                     continue;
 
                 if (ghostRole.GetChance()) ImpHauntedList.Add(ghostRole);
+            }
+            if (ghostRole.IsCoven())
+            {
+                if (CovenHauntedList.Contains(ghostRole) && getCount[ghostRole] <= 0)
+                    CovenHauntedList.Remove(ghostRole);
+
+                if (CovenHauntedList.Contains(ghostRole) || getCount[ghostRole] <= 0)
+                    continue;
+
+                if (ghostRole.GetChance()) CovenHauntedList.Add(ghostRole);
             }
         }
 
@@ -149,12 +164,32 @@ public static class GhostRoleAssign
             }
             return;
         }
+        if (IsCoven)
+        {
+            if (CovenHauntedList.Any())
+            {
+                var rnd = IRandom.Instance;
+                int randindx = rnd.Next(CovenHauntedList.Count);
+                ChosenRole = CovenHauntedList[randindx];
+
+            }
+            if (ChosenRole.IsGhostRole())
+            {
+                CovenCount++;
+                getCount[ChosenRole]--; // Only deduct if role has been set.
+                player.GetRoleClass().OnRemove(player.PlayerId);
+                player.RpcSetCustomRole(ChosenRole);
+                player.GetRoleClass().OnAdd(player.PlayerId);
+            }
+            return;
+        }
 
     }
     public static void Init()
     {
         CrewCount = 0;
         ImpCount = 0;
+        CovenCount = 0;
         getCount.Clear();
         GhostGetPreviousRole.Clear();
     }

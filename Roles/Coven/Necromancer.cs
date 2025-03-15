@@ -170,7 +170,7 @@ internal class Necromancer : CovenManager
                 RevertRole(nm, role);
         }, AbilityDuration.GetFloat(), "Necromancer Revert Role");
     }
-    private static void RevertRole(PlayerControl nm, CustomRoles role)
+    public static void RevertRole(PlayerControl nm, CustomRoles role)
     {
         if (nm == null) return;
         if (nm.GetCustomRole() != CustomRoles.Necromancer)

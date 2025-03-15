@@ -910,6 +910,9 @@ public enum CustomRoles
     Workaholic,
     Wraith,
 
+    //Coven Ghost
+    Bestower,
+
     //Coven
     Coven,
     Conjurer,

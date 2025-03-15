@@ -2049,7 +2049,7 @@ public static class Utils
                             }
                             if (Illusionist.IsNonCovIllusioned(target.PlayerId))
                             {
-                                var randomRole = CustomRolesHelper.AllRoles.Where(role => role.IsEnable() && !role.IsAdditionRole() && role.IsCoven()).ToList().RandomElement();
+                                var randomRole = CustomRolesHelper.AllRoles.Where(role => role.IsEnable() && !role.IsAdditionRole() && role.IsCoven() && !role.IsGhostRole()).ToList().RandomElement();
                                 blankRT.Clear().Append(randomRole.GetColoredTextByRole(GetString(randomRole.ToString())));
                                 if (randomRole is CustomRoles.CovenLeader or CustomRoles.Jinx or CustomRoles.Illusionist or CustomRoles.VoodooMaster) // Roles with Ability Uses
                                 {
@@ -2118,7 +2118,7 @@ public static class Utils
                                         TargetPlayerName.Clear().Append(GetTragetId);
                                     }
 
-                                    if (Options.CovenCanGuess.GetBool() && seerRole.IsCoven())
+                                    if (Options.CovenCanGuess.GetBool() && seerRole.IsCoven() && seerRole == CustomRoles.Ritualist)
                                     {
                                         TargetPlayerName.Clear().Append(GetTragetId);
                                     }

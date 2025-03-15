@@ -440,6 +440,7 @@ public static class Options
     public static OptionItem NeutralCanBecomeGhost;
     public static OptionItem MaxImpGhost;
     public static OptionItem MaxCrewGhost;
+    public static OptionItem MaxCovenGhost;
     public static OptionItem DefaultAngelCooldown;
 
 
@@ -1070,6 +1071,16 @@ public static class Options
             .SetColor(new Color32(172, 66, 242, byte.MaxValue));
 
         CustomRoleManager.GetNormalOptions(Custom_RoleType.CovenUtility).ForEach(r => r.SetupCustomOption());
+
+        /*
+         * Coven Ghost Roles
+         */
+        TextOptionItem.Create(10000116, "RoleType.CovenGhost", TabGroup.CovenRoles)
+            .SetGameMode(CustomGameMode.Standard)
+            .SetColor(new Color32(172, 66, 242, byte.MaxValue));
+
+        CustomRoleManager.GetNormalOptions(Custom_RoleType.CovenGhosts).ForEach(r => r.SetupCustomOption());
+
         #endregion
 
         yield return null;
@@ -2053,6 +2064,10 @@ public static class Options
             .SetValueFormat(OptionFormat.Times)
             .SetColor(new Color32(217, 218, 255, byte.MaxValue));
         MaxCrewGhost = IntegerOptionItem.Create(60860, "MaxCrewGhostRole", new(0, 15, 1), 15, TabGroup.ModSettings, false)
+            .SetGameMode(CustomGameMode.Standard)
+            .SetValueFormat(OptionFormat.Times)
+            .SetColor(new Color32(217, 218, 255, byte.MaxValue));
+        MaxCovenGhost = IntegerOptionItem.Create(60880, "MaxCovenGhostRole", new(0, 15, 1), 15, TabGroup.ModSettings, false)
             .SetGameMode(CustomGameMode.Standard)
             .SetValueFormat(OptionFormat.Times)
             .SetColor(new Color32(217, 218, 255, byte.MaxValue));

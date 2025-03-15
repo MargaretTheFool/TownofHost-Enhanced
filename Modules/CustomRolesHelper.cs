@@ -79,7 +79,8 @@ public static class CustomRolesHelper
         if (role.GetStaticRoleClass().ThisRoleType is
             Custom_RoleType.CrewmateGhosts or
             Custom_RoleType.CrewmateVanillaGhosts or
-            Custom_RoleType.ImpostorGhosts)
+            Custom_RoleType.ImpostorGhosts or
+            Custom_RoleType.CovenGhosts)
             return true;
 
         return role is
@@ -310,7 +311,8 @@ public static class CustomRolesHelper
             Custom_RoleType.CovenKilling or
             Custom_RoleType.CovenPower or
             Custom_RoleType.CovenTrickery or
-            Custom_RoleType.CovenUtility;
+            Custom_RoleType.CovenUtility or
+            Custom_RoleType.CovenGhosts;
     }
     public static bool IsAbleToBeSidekicked(this CustomRoles role)
         => role.GetDYRole() == RoleTypes.Impostor && !role.IsImpostor() && !role.IsRecruitingRole();
@@ -1508,6 +1510,7 @@ public enum Custom_RoleType
     CovenKilling,
     CovenTrickery,
     CovenUtility,
+    CovenGhosts,
 
     None
 }

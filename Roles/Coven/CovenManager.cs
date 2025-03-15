@@ -27,7 +27,7 @@ public abstract class CovenManager : RoleBase // NO, THIS IS NOT A ROLE
     public static readonly Dictionary<byte, byte> necroVotes = [];
     public static void RunSetUpImpVisOptions(int Id)
     {
-        foreach (var cov in CustomRolesHelper.AllRoles.Where(x => x.IsCoven()).ToArray())
+        foreach (var cov in CustomRolesHelper.AllRoles.Where(x => x.IsCoven() && !x.IsGhostRole()).ToArray())
         {
             SetUpImpVisOption(cov, Id, true, CovenImpVisMode);
             Id++;
@@ -35,7 +35,7 @@ public abstract class CovenManager : RoleBase // NO, THIS IS NOT A ROLE
     }
     public static void RunSetUpVentOptions(int Id)
     {
-        foreach (var cov in CustomRolesHelper.AllRoles.Where(x => x.IsCoven()).ToArray())
+        foreach (var cov in CustomRolesHelper.AllRoles.Where(x => x.IsCoven() && !x.IsGhostRole()).ToArray())
         {
             SetUpVentOption(cov, Id, true, CovenVentMode);
             Id++;

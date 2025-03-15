@@ -1193,7 +1193,7 @@ class MeetingHudStartPatch
                 }
                 if (Illusionist.IsNonCovIllusioned(targetId))
                 {
-                    var randomRole = CustomRolesHelper.AllRoles.Where(role => role.IsEnable() && !role.IsAdditionRole() && role.IsCoven()).ToList().RandomElement();
+                    var randomRole = CustomRolesHelper.AllRoles.Where(role => role.IsEnable() && !role.IsAdditionRole() && role.IsCoven() && !role.IsGhostRole()).ToList().RandomElement();
                     blankRT.Clear().Append(ColorString(GetRoleColor(randomRole), GetString(randomRole.ToString())));
                     if (randomRole.GetStaticRoleClass().IsMethodOverridden("GetProgressText")) // Roles with Ability Uses
                     {
