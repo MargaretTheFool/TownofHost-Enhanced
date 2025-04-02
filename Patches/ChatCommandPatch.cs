@@ -2230,12 +2230,11 @@ internal class ChatCommands
                         break;
                     }
                 }
-                else { 
-                    if (text.Contains("/role") || text.Contains("/роль"))
-                        subArgs = text.Remove(0, 5);
-                    else
-                        subArgs = text.Remove(0, 2);
-                }
+
+                if (text.Contains("/role") || text.Contains("/роль"))
+                    subArgs = text.Remove(0, 5);
+                else
+                    subArgs = text.Remove(0, 2);
                 SendRolesInfo(subArgs, player.PlayerId, isDev: player.FriendCode.GetDevUser().DeBug);
                 break;
 
