@@ -351,11 +351,20 @@ internal class ChatCommands
                 case "/р":
                 case "/роль":
                     canceled = true;
+                    if (Main.IsAprilFools) // Troll the player 75% of the time on April Fools
+                    {
+                        var rand = IRandom.Instance;
+                        if (rand.Next(0, 100) < 75)
+                        {
+                            Utils.SendMessage(GetString("AprilFools.Troll"), PlayerControl.LocalPlayer.PlayerId);
+                            break;
+                        }
+                    }
                     if (text.Contains("/role") || text.Contains("/роль"))
                         subArgs = text.Remove(0, 5);
                     else
                         subArgs = text.Remove(0, 2);
-                    SendRolesInfo(subArgs, PlayerControl.LocalPlayer.PlayerId);
+                    SendRolesInfo(subArgs, PlayerControl.LocalPlayer.PlayerId);                   
                     break;
 
                 case "/up":
@@ -2212,10 +2221,21 @@ internal class ChatCommands
             case "/р":
             case "/роль":
                 Logger.Info($"Command '/r' was activated", "OnReceiveChat");
-                if (text.Contains("/role") || text.Contains("/роль"))
-                    subArgs = text.Remove(0, 5);
-                else
-                    subArgs = text.Remove(0, 2);
+                if (Main.IsAprilFools) // Troll the player 75% of the time on April Fools
+                {
+                    var rand = IRandom.Instance;
+                    if (rand.Next(0, 100) < 75)
+                    {
+                        Utils.SendMessage(GetString("AprilFools.Troll"), player.PlayerId);
+                        break;
+                    }
+                }
+                else { 
+                    if (text.Contains("/role") || text.Contains("/роль"))
+                        subArgs = text.Remove(0, 5);
+                    else
+                        subArgs = text.Remove(0, 2);
+                }
                 SendRolesInfo(subArgs, player.PlayerId, isDev: player.FriendCode.GetDevUser().DeBug);
                 break;
 

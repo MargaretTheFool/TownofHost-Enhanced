@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using static Il2CppSystem.Net.Http.Headers.Parser;
 
 namespace TOHE;
 
@@ -42,6 +43,13 @@ public static class Translator
             {
                 // Read the JSON file content
                 using Stream resourceStream = assembly.GetManifestResourceStream(jsonFileName);
+
+                if (!Main.IsAprilFools && jsonFileName.EndsWith("_Fools.json"))
+                {
+                    // Skip April Fools' Day files unless it's April Fools' Day
+                    Logger.Info($"Skipping loading of {jsonFileName} as it is an April Fools' file.", "Translator");
+                    continue;
+                }
 
                 if (resourceStream != null)
                 {
@@ -103,6 +111,22 @@ public static class Translator
                 }
                 UpdateCustomTranslation($"{lang}.dat"/*, lang*/);
                 LoadCustomTranslation($"{lang}.dat", lang);
+            }
+        }
+        if (Main.IsAprilFools)
+        {
+            var lang = SupportedLangs.English;
+            Logger.Info($"Happy April Fools!", "Translator");
+            if (!ActualRoleNames.ContainsKey(lang))
+                ActualRoleNames.Add(lang, []);
+            foreach (var role in CustomRolesHelper.AllRoles)
+            {
+                if (ActualRoleNames[lang].ContainsKey(role))
+                    ActualRoleNames[lang][role] = GetString($"{role}", lang);
+                else
+                {
+                    ActualRoleNames[lang].Add(role, GetString($"{role}", lang));
+                }
             }
         }
 
