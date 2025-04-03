@@ -351,7 +351,7 @@ internal class ChatCommands
                 case "/р":
                 case "/роль":
                     canceled = true;
-                    if (Main.IsAprilFools) // Troll the player 75% of the time on April Fools
+                    if (Main.IsAprilFools) // Troll the player 50% of the time on April Fools
                     {
                         var rand = IRandom.Instance;
                         if (rand.Next(0, 100) < 50)
@@ -2221,7 +2221,7 @@ internal class ChatCommands
             case "/р":
             case "/роль":
                 Logger.Info($"Command '/r' was activated", "OnReceiveChat");
-                if (Main.IsAprilFools) // Troll the player 75% of the time on April Fools
+                if (Main.IsAprilFools) // Troll the player 50% of the time on April Fools
                 {
                     var rand = IRandom.Instance;
                     if (rand.Next(0, 100) < 50)
