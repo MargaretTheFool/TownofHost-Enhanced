@@ -354,7 +354,7 @@ internal class ChatCommands
                     if (Main.IsAprilFools) // Troll the player 75% of the time on April Fools
                     {
                         var rand = IRandom.Instance;
-                        if (rand.Next(0, 100) < 75)
+                        if (rand.Next(0, 100) < 50)
                         {
                             Utils.SendMessage(GetString("AprilFools.Troll"), PlayerControl.LocalPlayer.PlayerId);
                             break;
@@ -2224,7 +2224,7 @@ internal class ChatCommands
                 if (Main.IsAprilFools) // Troll the player 75% of the time on April Fools
                 {
                     var rand = IRandom.Instance;
-                    if (rand.Next(0, 100) < 75)
+                    if (rand.Next(0, 100) < 50)
                     {
                         Utils.SendMessage(GetString("AprilFools.Troll"), player.PlayerId);
                         break;
