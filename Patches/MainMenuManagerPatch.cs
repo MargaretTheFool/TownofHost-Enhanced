@@ -116,6 +116,8 @@ public static class MainMenuManagerPatch
         // The glint on the Among Us Menu
         __instance.mainMenuUI.FindChild<SpriteRenderer>("WindowShine").transform.gameObject.SetActive(false);
         __instance.mainMenuUI.FindChild<Transform>("ScreenCover").gameObject.SetActive(false);
+        __instance.mainMenuUI.FindChild<SpriteRenderer>("LOGO-AU").transform.gameObject.SetActive(false);
+
 
         GameObject leftPanel = __instance.mainMenuUI.FindChild<Transform>("LeftPanel").gameObject;
         GameObject rightPanel = __instance.mainMenuUI.FindChild<Transform>("RightPanel").gameObject;
@@ -143,6 +145,12 @@ public static class MainMenuManagerPatch
         int choice = rand.Next(0, fileNames.Length);
 
         spriteRenderer.sprite = Utils.LoadSprite(fileNames[choice], 150f);
+
+        GameObject logo = new("logo");
+        logo.transform.position = new Vector3(-3.6f, 1.8f, 1f);
+        var logoRenderer = logo.AddComponent<SpriteRenderer>();
+        string[] logoNames = assembly.GetManifestResourceNames().Where(resourceName => resourceName.StartsWith("TOHE.Resources.Images.TitleIcons") && resourceName.EndsWith(".png")).ToArray();
+        logoRenderer.sprite = Utils.LoadSprite(logoNames[rand.Next(0,logoNames.Length)], 200f); // if every logo is roughly 640 x 175, this will be fine
 
 
         //__instance.playLocalButton.inactiveSprites.GetComponent<SpriteRenderer>().color = new Color(0.1647f, 0f, 0.7765f);
