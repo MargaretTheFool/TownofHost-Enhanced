@@ -1,7 +1,9 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.XR;
 using static TOHE.Translator;
+using static UnityEngine.RemoteConfigSettingsHelper;
 using Object = UnityEngine.Object;
 
 namespace TOHE;
@@ -60,10 +62,12 @@ public class GameSettingMenuPatch
             label.fontStyle = FontStyles.UpperCase;
             label.text = $"<color={htmlcolor}>{GetString("TabGroup." + tab)}</color>";
 
+            
             _ = ColorUtility.TryParseHtmlString(htmlcolor, out Color tabColor);
-            button.inactiveSprites.GetComponent<SpriteRenderer>().color = tabColor;
-            button.activeSprites.GetComponent<SpriteRenderer>().color = tabColor;
-            button.selectedSprites.GetComponent<SpriteRenderer>().color = tabColor;
+            // button.inactiveSprites.GetComponent<SpriteRenderer>().color = tabColor;
+            button.activeSprites.GetComponent<SpriteRenderer>().color = tabColor.SetAlpha(15);
+            button.selectedSprites.GetComponent<SpriteRenderer>().color = tabColor.SetAlpha(40);
+            
 
             Vector3 offset = new(0.0f, 0.5f * (((int)tab + 1) / 2), 0.0f);
             button.transform.localPosition = ((((int)tab + 1) % 2 == 0) ? ButtonPositionLeft : ButtonPositionRight) - offset;
@@ -73,6 +77,11 @@ public class GameSettingMenuPatch
             buttonComponent.OnClick = new();
             buttonComponent.OnClick.AddListener(
                 (UnityEngine.Events.UnityAction)(() => __instance.ChangeTab((int)tab + 3, false)));
+
+            var settingBanner = Utils.LoadSprite($"TOHE.Resources.Images.SettingBanner.{tab}.png", 100f);
+            button.inactiveSprites.GetComponent<SpriteRenderer>().sprite = settingBanner;
+            button.activeSprites.GetComponent<SpriteRenderer>().sprite = settingBanner;
+            button.selectedSprites.GetComponent<SpriteRenderer>().sprite = settingBanner;
 
             ModSettingsButtons.Add(tab, button);
         }
@@ -139,6 +148,15 @@ public class GameSettingMenuPatch
 
         gameSettingButton.transform.localPosition = ButtonPositionLeft;
         gameSettingButton.transform.localScale = ButtonSize;
+        var color = new Color(121, 171, 158);
+        gameSettingButton.activeSprites.GetComponent<SpriteRenderer>().color = color.SetAlpha(15);
+        gameSettingButton.selectedSprites.GetComponent<SpriteRenderer>().color = color.SetAlpha(40);
+
+        var settingBanner = Utils.LoadSprite("TOHE.Resources.Images.SettingBanner.GameSettings.png", 100f);
+        gameSettingButton.inactiveSprites.GetComponent<SpriteRenderer>().sprite = settingBanner;
+        gameSettingButton.activeSprites.GetComponent<SpriteRenderer>().sprite = settingBanner;
+        gameSettingButton.selectedSprites.GetComponent<SpriteRenderer>().sprite = settingBanner;
+
 
         __instance.RoleSettingsButton.gameObject.SetActive(false);
 
