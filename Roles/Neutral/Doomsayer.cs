@@ -321,7 +321,6 @@ internal class Doomsayer : RoleBase
         switch (role.GetCustomRoleType())
         {
             case Custom_RoleType.CrewmateVanilla:          
-            case Custom_RoleType.CrewmateBasic:          
             case Custom_RoleType.NeutralBenign:          
             case Custom_RoleType.ImpostorVanilla:   
                 result += "Basic";
@@ -336,6 +335,7 @@ internal class Doomsayer : RoleBase
             case Custom_RoleType.ImpostorSupport:
             case Custom_RoleType.NeutralEvil:
             case Custom_RoleType.NeutralChaos:
+            case Custom_RoleType.CrewmateProtective:
                 result += "Dedicated";
                 break;
             case Custom_RoleType.Madmate:
@@ -348,6 +348,7 @@ internal class Doomsayer : RoleBase
             case Custom_RoleType.CovenKilling:
             case Custom_RoleType.ImpostorKilling:
             case Custom_RoleType.CrewmateKilling:
+            case Custom_RoleType.CrewmateInvestigative:
                 result += "Skilled";
                 break;
             default:
