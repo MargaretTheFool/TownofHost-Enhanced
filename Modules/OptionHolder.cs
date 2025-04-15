@@ -943,7 +943,7 @@ public static class Options
             .SetGameMode(CustomGameMode.Standard)
             .SetColor(new Color32(140, 255, 255, byte.MaxValue));
 
-        CrewInvestCanBeGuessed = BooleanOptionItem.Create(60035, "CrewInvestCanBeGuessed", true, TabGroup.CrewmateRoles, false)
+        CrewInvestCanBeGuessed = BooleanOptionItem.Create(60037, "CrewInvestCanBeGuessed", true, TabGroup.CrewmateRoles, false)
             .SetGameMode(CustomGameMode.Standard)
             .SetHeader(true);
 
