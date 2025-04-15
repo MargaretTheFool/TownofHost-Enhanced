@@ -195,7 +195,7 @@ public class PlayerState(byte playerId)
                 isCovenTeam = false;
                 TeamLockApplied = true; // Lock the team
                 LockedTeam = Custom_Team.Crewmate; // Lock to Crewmate team
-                LockedRoleType = Custom_RoleType.CrewmateBasic; // Enforce role type
+                LockedRoleType = Custom_RoleType.CrewmateSupport; // Enforce role type
                 RandomizerWinCondition = Custom_Team.Crewmate; // Set win condition
             }
         }

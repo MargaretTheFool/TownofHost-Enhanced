@@ -124,7 +124,7 @@ internal class Randomizer : RoleBase
             if (randomRole.IsCrewmate())
             {
                 playerState.IsCrewmateTeam = true;
-                playerState.LockedRoleType = Custom_RoleType.CrewmateBasic; // Lock to Crewmate type
+                playerState.LockedRoleType = Custom_RoleType.CrewmateSupport; // Lock to Crewmate type
                 Logger.Info($"Randomizer locked to Crewmate team.", "Randomizer");
             }
             else if (randomRole.IsImpostorTeam())
