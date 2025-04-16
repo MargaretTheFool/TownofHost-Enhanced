@@ -234,19 +234,19 @@ internal class Randomizer : RoleBase
         // Dead players' win conditions
         if (!pc.IsAlive())
         {
-            if (playerState.LockedTeam == Custom_Team.Crewmate && CustomWinnerHolder.WinnerTeam == CustomWinner.Crewmate)
+            if (playerState.RandomizerWinCondition == Custom_Team.Crewmate && CustomWinnerHolder.WinnerTeam == CustomWinner.Crewmate)
             {
                 CustomWinnerHolder.WinnerIds.Add(pc.PlayerId);
                 CustomWinnerHolder.AdditionalWinnerTeams.Add(AdditionalWinners.Randomizer);
                 Logger.Info($"Randomizer {pc.name} (dead) wins with the Crewmate team.", "Randomizer");
             }
-            else if (playerState.LockedTeam == Custom_Team.Impostor && CustomWinnerHolder.WinnerTeam == CustomWinner.Impostor)
+            else if (playerState.RandomizerWinCondition == Custom_Team.Impostor && CustomWinnerHolder.WinnerTeam == CustomWinner.Impostor)
             {
                 CustomWinnerHolder.WinnerIds.Add(pc.PlayerId);
                 CustomWinnerHolder.AdditionalWinnerTeams.Add(AdditionalWinners.Randomizer);
                 Logger.Info($"Randomizer {pc.name} (dead) wins with the Impostor team.", "Randomizer");
             }
-            else if (playerState.LockedTeam == Custom_Team.Coven && CustomWinnerHolder.WinnerTeam == CustomWinner.Coven)
+            else if (playerState.RandomizerWinCondition == Custom_Team.Coven && CustomWinnerHolder.WinnerTeam == CustomWinner.Coven)
             {
                 CustomWinnerHolder.WinnerIds.Add(pc.PlayerId);
                 CustomWinnerHolder.AdditionalWinnerTeams.Add(AdditionalWinners.Randomizer);
@@ -350,7 +350,7 @@ internal class Randomizer : RoleBase
         {
             Custom_Team.Crewmate => CustomRolesHelper.AllRoles.Where(role => role.IsCrewmate() && (OnlyEnabledRoles.GetBool() ? role.IsEnable() : true)).ToList(),
             Custom_Team.Impostor => CustomRolesHelper.AllRoles.Where(role => role.IsImpostor() && (OnlyEnabledRoles.GetBool() ? role.IsEnable() : true)).ToList(),
-            Custom_Team.Neutral => CustomRolesHelper.AllRoles.Where(role => role.IsNeutral() && (OnlyEnabledRoles.GetBool() ? role.IsEnable() : true) && role is not CustomRoles.Randomizer).ToList(),
+            Custom_Team.Neutral => CustomRolesHelper.AllRoles.Where(role => role.IsNeutral() && (OnlyEnabledRoles.GetBool() ? role.IsEnable() : true) && role is not CustomRoles.Randomizer or CustomRoles.Lawyer).ToList(),
             Custom_Team.Coven => CustomRolesHelper.AllRoles.Where(role => role.IsCoven() && (OnlyEnabledRoles.GetBool() ? role.IsEnable() : true)).ToList(),
             _ => new List<CustomRoles>() // Default empty list
         };
@@ -562,7 +562,7 @@ internal class Randomizer : RoleBase
 
                 // Randomly determine the number of add-ons to assign
                 int addOnCount = Random.Range(minAddOns, maxAddOns + 1);
-                List<CustomRoles> selectedAddOns = CustomRolesHelper.AllRoles.Where(role => role.IsAdditionRole() && !role.IsBetrayalAddon() && role is not CustomRoles.Admired or CustomRoles.Lovers or CustomRoles.Cleansed && (OnlyEnabledRoles.GetBool() ? role.IsEnable() : true)).ToList()
+                List<CustomRoles> selectedAddOns = CustomRolesHelper.AllRoles.Where(role => role.IsAdditionRole() && !role.IsBetrayalAddon() && !AddonBlackList(role) && (OnlyEnabledRoles.GetBool() ? role.IsEnable() : true)).ToList()
                     .OrderBy(_ => Random.value)
                     .Take(addOnCount)
                     .ToList();
@@ -572,7 +572,7 @@ internal class Randomizer : RoleBase
                 }
 
                 foreach (var addOn in selectedAddOns)
-                {
+                {                    
                     pc.RpcSetCustomRole(addOn, false, false);
                     Logger.Info($"Assigned Add-on {addOn} to {pc.name}", "Randomizer");
                 }
@@ -584,7 +584,14 @@ internal class Randomizer : RoleBase
             pc.GetRoleClass()?.OnAdd(pc.PlayerId);
         }
     }
-
+    private static bool AddonBlackList(CustomRoles role)
+    {
+        // Check if the role is in the blacklist
+        return role.IsBetrayalAddonV2() || role is
+            CustomRoles.Lovers or
+            CustomRoles.Cleansed or
+            CustomRoles.Admired;
+    }
     private void ResetSubRoles(byte playerId)
     {
         var playerState = Main.PlayerStates[playerId];
